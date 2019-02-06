@@ -5,5 +5,4 @@ enabled:
   - align_equals
 
 disabled:
-  - concat_without_spaces
   - unalign_equals
