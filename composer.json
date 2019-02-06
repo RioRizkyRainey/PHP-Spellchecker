@@ -1,0 +1,38 @@
+{
+    "name": "riorizkyrainey/php-spell-checker-suggestion",
+    "description": "Spellchecker in PHP with suggestion",
+    "keywords": [
+        "spellchecker",
+        "typo",
+        "suggestion",
+        "word",
+        "word suggestion"
+    ],
+    "type": "library",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=7.0.0",
+        "orchestra/testbench": "^3.4"
+    },
+    "authors": [
+        {
+            "name": "Rio Rizky Rainey Ferbiansyah",
+            "email": "rizkyrainey@gmail.com",
+            "homepage": "http://rainey.id"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Rainey\\Spellchecker\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rainey\\Spellchecker\\Test\\": "tests"
+        }
+    }
+}
