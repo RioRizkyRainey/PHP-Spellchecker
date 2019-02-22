@@ -11,6 +11,7 @@ class EnchantSuggestion implements SuggestionInterface
     protected $ditcitonaryPath;
     protected $enchant;
     protected $language;
+    protected $dictionary;
 
     public function __construct(string $ditcitonaryPath, string $language)
     {
@@ -19,10 +20,14 @@ class EnchantSuggestion implements SuggestionInterface
 
         $this->enchant = enchant_broker_init();
 
+        $this->language = $this->normalizeLangCode();
+
         enchant_broker_set_dict_path($this->enchant, ENCHANT_MYSPELL, $ditcitonaryPath);
         enchant_broker_set_dict_path($this->enchant, ENCHANT_ISPELL, $ditcitonaryPath);
         enchant_broker_get_dict_path($this->enchant, ENCHANT_MYSPELL);
         enchant_broker_get_dict_path($this->enchant, ENCHANT_ISPELL);
+
+        $this->dictionary = enchant_broker_request_dict($this->enchant, $this->language);
     }
 
     public function addDictionary(DictionaryInterface $dictionary)
@@ -30,34 +35,27 @@ class EnchantSuggestion implements SuggestionInterface
         throw new Exception("Method not supported for Enchant Suggestion. \n Use constructor for set dictionary path");
     }
 
-    public function suggestion(string $words): array
+    public function suggestion(string $word): array
     {
         $suggestions = array();
-        $lang = $this->normalizeLangCode();
-        if (enchant_broker_dict_exists($this->enchant, $lang)) {
-            $dict = enchant_broker_request_dict($this->enchant, $lang);
+        if (!enchant_dict_check($this->dictionary, $word)) {
+            $suggs = enchant_dict_suggest($this->dictionary, $word);
 
-            $words = explode(" ", $words);
-
-            foreach ($words as $word) {
-                if (!enchant_dict_check($dict, $word)) {
-                    $suggs = enchant_dict_suggest($dict, $word);
-
-                    if (!is_array($suggs)) {
-                        $suggs = array();
-                    }
-
-                    $suggestions[$word] = $suggs;
-                }
+            if (!is_array($suggs)) {
+                $suggs = array();
             }
 
-            enchant_broker_free_dict($dict);
-            enchant_broker_free($this->enchant);
-            return $suggestions;
-        } else {
-            enchant_broker_free($this->enchant);
-            throw new Exception("Enchant spellchecker could not find dictionary for language: " . $lang);
+            $suggestions[$word] = $suggs;
         }
+
+        enchant_broker_free_dict($this->dictionary);
+        enchant_broker_free($this->enchant);
+        return $suggestions;
+    }
+
+    public function isDictionaryExist()
+    {
+        return enchant_broker_dict_exists($this->enchant, $lang);
     }
 
     private function normalizeLangCode()
