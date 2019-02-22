@@ -48,14 +48,18 @@ class EnchantSuggestion implements SuggestionInterface
             $suggestions[$word] = $suggs;
         }
 
-        enchant_broker_free_dict($this->dictionary);
-        enchant_broker_free($this->enchant);
         return $suggestions;
     }
 
     public function isDictionaryExist()
     {
         return enchant_broker_dict_exists($this->enchant, $lang);
+    }
+
+    public function freeBroker()
+    {
+        enchant_broker_free_dict($this->dictionary);
+        enchant_broker_free($this->enchant);
     }
 
     private function normalizeLangCode()
