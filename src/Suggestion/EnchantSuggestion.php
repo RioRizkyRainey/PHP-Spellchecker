@@ -45,7 +45,7 @@ class EnchantSuggestion implements SuggestionInterface
                 $suggs = array();
             }
 
-            $suggestions[$word] = $suggs;
+            $suggestions = $suggs;
         }
 
         return $suggestions;
