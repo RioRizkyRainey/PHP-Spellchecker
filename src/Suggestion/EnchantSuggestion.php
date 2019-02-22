@@ -53,7 +53,7 @@ class EnchantSuggestion implements SuggestionInterface
 
     public function isDictionaryExist()
     {
-        return enchant_broker_dict_exists($this->enchant, $lang);
+        return enchant_broker_dict_exists($this->enchant, $this->language);
     }
 
     public function freeBroker()
