@@ -29,9 +29,6 @@ class DamerauLevenshteinSuggestion implements SuggestionInterface
     {
         $results = array();
         foreach ($this->dictionaries as $index => $dictionary) {
-
-            // print("dictionary: </br>");
-            // print_r($dictionary);
             while ($dictionary->next()) {
                 $wordDictionary = $dictionary->current();
                 print("dameareu $wordDictionary: </br>");
